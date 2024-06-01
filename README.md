@@ -57,6 +57,15 @@ Este repositório contém os arquivos necessários para criar containers Docker 
 
 Você pode personalizar as configurações dos containers editando os arquivos `docker-compose.yaml`, `dockerfile-jupyter` e `dockerfile-spark` conforme necessário.
 
+Por exemplo: Se quiser alterar a quantidade de memória ou cores do Spark Worker, ajuste os valores das variáveis de ambiente `SPARK_WORKER_MEMORY` e `SPARK_WORKER_CORES` no `docker-compose.yml`
+
+```yaml
+environment:
+  - SPARK_MODE=worker
+  - SPARK_WORKER_MEMORY=1G  # Altere este valor para ajustar a memória (ex: 2G)
+  - SPARK_WORKER_CORES=1    # Altere este valor para ajustar o número de núcleos (ex: 2)
+```
+
 ## Contribuições
 
 Contribuições são bem vindas! Sinta-se à vontade para sugerir melhorias ou novos ambientes.

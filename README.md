@@ -1,4 +1,4 @@
-> Written with [StackEdit](https:/# Projeto de Containers Spark e Jupyter
+> Written with StackEdit
 
 Este repositório contém os arquivos necessários para criar containers Docker para:
 

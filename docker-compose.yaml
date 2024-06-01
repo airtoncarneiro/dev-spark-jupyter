@@ -1,5 +1,5 @@
 services:
-  spark:
+  master:
     build:
       context: .
       dockerfile: dockerfile-spark
@@ -10,12 +10,9 @@ services:
       - '8080:8080'
     networks:
       - spark-net
-    volumes:
-      - ./data:/opt/bitnami/spark/data
-      - ./scripts:/opt/bitnami/spark/scripts
     command: ["/opt/bitnami/scripts/spark/run.sh"]
 
-  spark-worker:
+  worker:
     build:
       context: .
       dockerfile: dockerfile-spark
@@ -26,15 +23,12 @@ services:
       - SPARK_WORKER_MEMORY=1G
       - SPARK_WORKER_CORES=1
     depends_on:
-      - spark
+      - master
     networks:
       - spark-net
-    volumes:
-      - ./data:/opt/bitnami/spark/data
-      - ./scripts:/opt/bitnami/spark/scripts
     command: ["/opt/bitnami/scripts/spark/run.sh"]
 
-  spark-history-server:
+  history-server:
     build:
       context: .
       dockerfile: dockerfile-spark
@@ -42,34 +36,39 @@ services:
     container_name: spark-history-server
     environment:
       - SPARK_MODE=history-server
-      # - SPARK_HISTORY_SERVER_PORT=18080
-      # - SPARK_HISTORY_UI_PORT=18080
       - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=/opt/bitnami/spark/logs
-      # - SPARK_DAEMON_MEMORY=5g
-      # - SPARK_EVENTLOG_ENABLED=true
-      # - SPARK_DAEMON_MEMORY=10g
-      # - SPARK_HISTORY_RETAINEDAPPLICATIONS=100
-      # - SPARK_HISTORY_UI_MAXAPPLICATIONS=500
-      # - SPARK_HISTORY_STORE_MAXDISKUSAGE=100g
-      # - SPARK_HISTORY_FS_CLEANER_ENABLED=true
-      # - SPARK_HISTORY_FS_CLEANER_INTERVAL=8h
-      # - SPARK_HISTORY_FS_CLEANER_MAXAGE=5d
-      # - SPARK_HISTORY_FS_UPDATE_INTERVAL=10s
+      - SPARK_HISTORY_FS_UPDATE_INTERVAL=10s
     ports:
       - '18080:18080'
     volumes:
-      - ./data:/opt/bitnami/spark/data
       - ./logs:/opt/bitnami/spark/logs
 
     command: ["/opt/bitnami/spark/sbin/start-history-server.sh"]
     depends_on:
-      - spark
+      - master
     networks:
       - spark-net
+  
+  jupyter:
+    build:
+      context: .
+      dockerfile: dockerfile-jupyter
+    image: jupyter/pyspark-notebook:latest
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./logs:/home/jovyan/work/logs
+    networks:
+      - spark-net
+    depends_on:
+      - master
+
 networks:
   spark-net:
     driver: bridge
 
-volumes:
-  spark-data:
-  spark-worker-data:
+# volumes:
+#   spark-worker-data:

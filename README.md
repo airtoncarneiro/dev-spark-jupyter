@@ -1,8 +1,8 @@
-> Written with StackEdit
+> Written with [StackEdit]
 
 Este repositório contém os arquivos necessários para criar containers Docker para:
 
- - Spark Master (v. 3.5.0)
+ - Spark Master (v. 3.5.1)
  - Spark Worker
  - Spark History Server
  - Jupyter Notebook
@@ -38,7 +38,19 @@ Este repositório contém os arquivos necessários para criar containers Docker 
     ```
     *Se não quiser worker: --scale worker=0*
 
-### Acessando as interfaces web
+
+### Parando/Desfazendo os containers:
+
+1. Parar o container e, além de mantê-lo, permanecem a rede e o volume:
+    ```bash
+    docker compose stop
+    ```
+2. Remover o container (desfaz tudo):
+    ```bash
+    docker compose down
+    ```
+
+## Acessando as interfaces web
 
 - **Spark Master**:
     - URL: [http://localhost:8080](http://localhost:8080)
@@ -51,7 +63,7 @@ Este repositório contém os arquivos necessários para criar containers Docker 
 - **Spark History Server**:
     - URL: [http://localhost:18080](http://localhost:18080)
     - Interface web do Spark History Server para visualizar o histórico de execuções de jobs.
-    - Os logs são armazenados no diretório `./logs`
+    - Os logs são armazenados no diretório `./logs` do Host
 
 ## Personalização
 

@@ -70,5 +70,5 @@ networks:
   spark-net:
     driver: bridge
 
-# volumes:
-#   spark-worker-data:
+volumes:
+  spark-worker-data:

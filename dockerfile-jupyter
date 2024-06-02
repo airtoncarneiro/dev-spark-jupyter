@@ -1,7 +1,13 @@
 FROM docker.io/jupyter/pyspark-notebook:spark-3.5.0
 
-RUN pip install findspark
+ARG JARS_LOCAL_DIR=/home/jovyan/jars
+ARG SPARK_MEASURE_URL="https://repo1.maven.org/maven2/ch/cern/sparkmeasure/"\
+"spark-measure_2.12/0.24/spark-measure_2.12-0.24.jar"
+
+RUN wget -P ${JARS_LOCAL_DIR} ${SPARK_MEASURE_URL} &&\
+    pip install --no-cache-dir findspark sparkmeasure
 
 ENV PYSPARK_PYTHON=/opt/bitnami/python/bin/python
 
-CMD ["jupyter-notebook", "--NotebookApp.token=''", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/home/jovyan/work"]
+CMD ["jupyter-notebook", "--NotebookApp.token=''", "--ip=0.0.0.0", \
+"--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/home/jovyan/work"]

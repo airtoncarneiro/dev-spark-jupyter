@@ -81,3 +81,26 @@ environment:
 ## Contribuições
 
 Contribuições são bem vindas! Sinta-se à vontade para sugerir melhorias ou novos ambientes.
+
+## Nota
+
+[2024-06-02] Inclusão do **Spark Measure**
+Caso queira fazer uso, veja um exemplo:
+    
+```python
+from sparkmeasure import StageMetrics
+stagemetrics = StageMetrics(spark)
+
+query = """
+spark.sql("select count(*) \
+from range(1000) \
+cross join range(1000) \
+cross join range(1000)").show()
+"""
+
+stagemetrics.runandmeasure(globals(), query)
+```
+e inclua o código abaixo no SparkSession:
+```bash
+.config("spark.jars", "/home/jovyan/jars/spark-measure_2.12-0.24.jar")
+```

@@ -65,6 +65,13 @@ Este repositório contém os arquivos necessários para criar containers Docker 
     - Interface web do Spark History Server para visualizar o histórico de execuções de jobs.
     - Os logs são armazenados no diretório `./logs` do Host
 
+## Usando o VSCode (devcontainer)
+
+Ao abrir o projeto no VSCode surgirá uma mensagem solicitando para abrir no _devcontainer_. Basta aceitar que todo o ambiente será montado automaticamente e você poderá usar o Jupyter integrado ao VSCode.
+
+![vscode devcontainer popup image](./img/devcontainer.png)
+
+
 ## Personalização
 
 Você pode personalizar as configurações dos containers editando os arquivos `docker-compose.yaml`, `dockerfile-jupyter` e `dockerfile-spark` conforme necessário.
@@ -104,3 +111,7 @@ e inclua o código abaixo no SparkSession:
 ```bash
 .config("spark.jars", "/home/jovyan/jars/spark-measure_2.12-0.24.jar")
 ```
+---
+[2024-06-14]
+1. Mudança de Jupyter para Jupyter Lab como default
+2. Disponibilização de um devcontainer para o VSCode

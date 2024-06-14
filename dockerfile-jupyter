@@ -4,9 +4,9 @@ ARG JARS_LOCAL_DIR=/home/jovyan/jars
 ARG SPARK_MEASURE_URL="https://repo1.maven.org/maven2/ch/cern/sparkmeasure/"\
 "spark-measure_2.12/0.24/spark-measure_2.12-0.24.jar"
 
-RUN wget -P ${JARS_LOCAL_DIR} ${SPARK_MEASURE_URL} &&\
-    pip install --no-cache-dir findspark sparkmeasure &&\
-    pip install ipykernel
+RUN wget -P ${JARS_LOCAL_DIR} ${SPARK_MEASURE_URL} && \
+    pip install --no-cache-dir findspark sparkmeasure ipykernel pyspark-stubs
+    
 
 ENV PYSPARK_PYTHON=/opt/bitnami/python/bin/python
 

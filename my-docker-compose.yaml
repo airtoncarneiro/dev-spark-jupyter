@@ -1,0 +1,47 @@
+services:
+  jupyter-notebook:
+    build:
+      context: .
+      target: jupyter-notebook
+    container_name: jupyter-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/notebooks
+      - ./logs:/logs
+    networks:
+      - spark-network
+
+  spark-master:
+    build:
+      context: .
+      target: spark
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-master.sh && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
+    networks:
+      - spark-network
+
+  spark-worker:
+    build:
+      context: .
+      target: spark
+    container_name: spark-worker
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
+
+networks:
+  spark-network:
+    driver: bridge

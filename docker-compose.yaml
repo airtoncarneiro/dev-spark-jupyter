@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile-spark
-    image: bitnami/spark:3.5.1
+    image: my-spark:3.5.0
     environment:
       - SPARK_MODE=master
     ports:
@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile-spark
-    image: bitnami/spark:3.5.1
+    image: my-spark:3.5.0
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://master:7077
@@ -32,8 +32,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile-spark
-    image: bitnami/spark:3.5.1
-    container_name: spark-history-server
+    image: my-spark:3.5.0
     environment:
       - SPARK_MODE=history-server
       - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=/opt/bitnami/spark/logs
@@ -53,13 +52,13 @@ services:
     build:
       context: .
       dockerfile: dockerfile-jupyter
-    image: jupyter/pyspark-notebook:latest
+    image: my-notebook:pyspark-3.5.0
     environment:
       - JUPYTER_ENABLE_LAB=yes
     ports:
       - "8888:8888"
     volumes:
-      - ./notebooks:/home/jovyan/work
+      - ./notebooks:/home/jovyan/work/notebooks
       - ./logs:/home/jovyan/work/logs
     networks:
       - spark-net

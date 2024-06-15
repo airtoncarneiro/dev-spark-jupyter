@@ -1,11 +1,23 @@
 FROM docker.io/bitnami/spark:3.5.0
 
+USER root
+
+RUN apt-get update && apt-get install -y wget && \
+    wget -qO- https://repo.continuum.io/archive/Anaconda3-2020.11-Linux-x86_64.sh > ~/anaconda.sh && \
+    bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh && \
+    ln -s /opt/conda/bin/python /usr/local/bin/python
+
+USER 1001
+
 ENV SPARK_RPC_AUTHENTICATION_ENABLED=no
 ENV SPARK_RPC_ENCRYPTION_ENABLED=no
 ENV SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
 ENV SPARK_SSL_ENABLED=no
 ENV SPARK_USER=spark
-ENV PYSPARK_PYTHON=/opt/bitnami/python/bin/python
+#ENV PYSPARK_PYTHON=/opt/bitnami/python/bin
+ENV PYSPARK_PYTHON=/opt/conda/bin/python
+ENV PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python
 
 RUN pip install findspark
 

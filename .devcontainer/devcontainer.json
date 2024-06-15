@@ -1,6 +1,9 @@
 {
     "name": "Dev Spark Jupyter",
-    "dockerComposeFile": "../docker-compose.yaml",
+    "dockerComposeFile": [
+        "../docker-compose.yaml",
+        "./docker-compose.override.yaml"
+    ],
     "service": "jupyter",
     "workspaceFolder": "/home/jovyan/work",
     "customizations": {

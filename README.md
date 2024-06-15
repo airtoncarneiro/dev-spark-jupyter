@@ -29,12 +29,12 @@ Este repositório contém os arquivos necessários para criar containers Docker 
 
 2. Para iniciar os containers com 1 worker, execute:
     ```bash
-    docker-compose up -d
+    docker compose up -d
     ```
 
 3. Para iniciar os containers com um ou mais workers, utilize a variável de ambiente `WORKERS` para definir o número de workers desejados. Por exemplo, para iniciar com 2 workers:
     ```bash
-    docker-compose up -d --scale worker=2
+    docker compose up -d --scale worker=2
     ```
     *Se não quiser worker: --scale worker=0*
 

@@ -5,10 +5,14 @@ ARG SPARK_MEASURE_URL="https://repo1.maven.org/maven2/ch/cern/sparkmeasure/"\
 "spark-measure_2.12/0.24/spark-measure_2.12-0.24.jar"
 
 RUN wget -P ${JARS_LOCAL_DIR} ${SPARK_MEASURE_URL} && \
-    pip install --no-cache-dir findspark sparkmeasure ipykernel pyspark-stubs
+    pip install --no-cache-dir findspark && \
+    pip install --no-cache-dir sparkmeasure ipykernel pyspark-stubs
     
-
-ENV PYSPARK_PYTHON=/opt/bitnami/python/bin/python
+ARG PYTHON_PATH=/opt/conda/bin/python
+ENV PYSPARK_PYTHON=${PYTHON_PATH}
+ENV PYSPARK_DRIVER_PYTHON=${PYTHON_PATH}
 
 CMD ["jupyter-lab", "--NotebookApp.token=''", "--ip=0.0.0.0", \
-"--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/home/jovyan/work"]
+"--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/home/jovyan/work/notebooks"]
+
+WORKDIR /home/jovyan/work

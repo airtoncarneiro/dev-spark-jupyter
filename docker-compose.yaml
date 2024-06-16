@@ -41,6 +41,27 @@ services:
     networks:
       - spark-network
 
+  history-server:
+    build:
+      context: .
+      args:
+        <<: *common-args
+    image: dev-spark-jupyter-pyspark:3.5.1
+    environment:
+      - SPARK_MODE=history-server
+      - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=/opt/bitnami/spark/logs
+      - SPARK_HISTORY_FS_UPDATE_INTERVAL=10s
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./logs:${USER_HOME}/logs
+    command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-history-server.sh && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
+
+
   jupyter-notebook:
     build:
       context: .

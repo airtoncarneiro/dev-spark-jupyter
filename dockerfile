@@ -41,10 +41,14 @@ ENV SPARK_USER=spark
 ENV PYSPARK_PYTHON=$VIRTUAL_ENV/bin/python
 ENV PYSPARK_DRIVER_PYTHON=$PYSPARK_PYTHON
 
+# Downloading Spark Measure JAR
+ARG JARS_USER_DIR=$USER_HOME/jars
+ARG SPARK_MEASURE_URL="https://repo1.maven.org/maven2/ch/cern/sparkmeasure/spark-measure_2.12/0.24/spark-measure_2.12-0.24.jar"
+RUN mkdir -p ${JARS_USER_DIR} \
+&& curl -o ${JARS_USER_DIR}/$(basename ${SPARK_MEASURE_URL}) ${SPARK_MEASURE_URL}
+
 # Set up Python virtual environment
 RUN python -m venv venv
 
 # Activate virtual environment and install packages
-RUN . venv/bin/activate && pip install --no-cache-dir jupyter pyspark findspark
-
-
+RUN . venv/bin/activate && pip install --no-cache-dir jupyter pyspark findspark sparkmeasure

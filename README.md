@@ -109,7 +109,7 @@ stagemetrics.runandmeasure(globals(), query)
 ```
 e inclua o código abaixo no SparkSession:
 ```bash
-.config("spark.jars", "/home/jovyan/jars/spark-measure_2.12-0.24.jar")
+.config("spark.jars", os.environ.get("JARS_USER_DIR"))
 ```
 ---
 [2024-06-14]

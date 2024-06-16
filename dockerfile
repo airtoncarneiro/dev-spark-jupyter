@@ -22,7 +22,7 @@ EXPOSE 8888
 WORKDIR /notebooks
 
 # Command to run Jupyter Lab
-CMD ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
 
 # Second stage: Spark
 FROM base AS spark

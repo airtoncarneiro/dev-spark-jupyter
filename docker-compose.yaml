@@ -1,73 +1,67 @@
+version: '3.8'
+
+# Definindo variáveis de ambiente comuns dentro de args
+x-common-args:
+  &common-args
+    USER_NAME: ${USER_NAME}
+    USER_HOME: ${USER_HOME}
+
 services:
-  master:
+  spark-master:
     build:
       context: .
-      dockerfile: dockerfile-spark
-    image: my-spark:3.5.0
+      args:
+        <<: *common-args
+    image: dev-spark-jupyter-pyspark:3.5.1
     environment:
-      - SPARK_MODE=master
+      SPARK_MODE: master
     ports:
-      - '8080:8080'
+      - "8080:8080"
+      - "7077:7077"
+    user: ${USER_NAME}
+    command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-master.sh && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
     networks:
-      - spark-net
-    command: ["/opt/bitnami/scripts/spark/run.sh"]
+      - spark-network
 
-  worker:
+  spark-worker:
     build:
       context: .
-      dockerfile: dockerfile-spark
-    image: my-spark:3.5.0
+      args:
+        <<: *common-args
+    image: dev-spark-jupyter-pyspark:3.5.1
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://master:7077
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
-    depends_on:
-      - master
-    networks:
-      - spark-net
-    command: ["/opt/bitnami/scripts/spark/run.sh"]
-
-  history-server:
-    build:
-      context: .
-      dockerfile: dockerfile-spark
-    image: my-spark:3.5.0
-    environment:
-      - SPARK_MODE=history-server
-      - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=/opt/bitnami/spark/logs
-      - SPARK_HISTORY_FS_UPDATE_INTERVAL=10s
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://spark-master:7077
     ports:
-      - '18080:18080'
-    volumes:
-      - ./logs:/opt/bitnami/spark/logs
-
-    command: ["/opt/bitnami/spark/sbin/start-history-server.sh"]
+      - "8081:8081"
+    user: ${USER_NAME}
+    command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
     depends_on:
-      - master
+      - spark-master
     networks:
-      - spark-net
-  
-  jupyter:
+      - spark-network
+
+  jupyter-notebook:
     build:
       context: .
-      dockerfile: dockerfile-jupyter
-    image: my-notebook:pyspark-3.5.0
-    environment:
-      - JUPYTER_ENABLE_LAB=yes
+      args:
+        <<: *common-args
+    image: dev-spark-jupyter-pyspark:3.5.1
+    # environment:
+      # Aqui você pode definir outras variáveis específicas do Jupyter, se necessário
     ports:
       - "8888:8888"
     volumes:
-      - ./notebooks:/home/jovyan/work/notebooks
-      - ./logs:/home/jovyan/work/logs
-    networks:
-      - spark-net
+      - ./notebooks:${USER_HOME}/notebooks
+      - ./logs:${USER_HOME}/logs
+    working_dir: ${USER_HOME}/notebooks
+    user: ${USER_NAME}
+    command: ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
     depends_on:
-      - master
+      - spark-master
+    networks:
+      - spark-network
 
 networks:
-  spark-net:
+  spark-network:
     driver: bridge
-
-volumes:
-  spark-worker-data:

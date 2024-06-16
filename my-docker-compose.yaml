@@ -2,21 +2,21 @@ services:
   jupyter-notebook:
     build:
       context: .
-      target: jupyter-notebook
-    image: my-jupyter
+    image: dev-spark-jupyter-pyspark:3.5.1
     ports:
       - "8888:8888"
     volumes:
       - ./notebooks:/notebooks
       - ./logs:/logs
+    working_dir: /notebooks
+    command: ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
     networks:
       - spark-network
 
   spark-master:
     build:
       context: .
-      target: spark
-    image: my-spark:3.5.1
+    image: dev-spark-jupyter-pyspark:3.5.1
     environment:
       - SPARK_MODE=master
     ports:
@@ -29,8 +29,7 @@ services:
   spark-worker:
     build:
       context: .
-      target: spark
-    image: my-spark:3.5.1
+    image: dev-spark-jupyter-pyspark:3.5.1
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077

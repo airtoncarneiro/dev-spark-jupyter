@@ -40,6 +40,3 @@ ENV PATH=$SPARK_HOME/bin:$PATH
 
 # Expose necessary ports for Spark
 EXPOSE 8080 7077 4040
-
-# Command to run Spark (as Master for example)
-CMD ["/opt/spark-3.5.1-bin-hadoop3/sbin/start-master.sh"]

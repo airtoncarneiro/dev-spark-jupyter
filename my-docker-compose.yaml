@@ -3,7 +3,7 @@ services:
     build:
       context: .
       target: jupyter-notebook
-    container_name: jupyter-notebook
+    image: my-jupyter
     ports:
       - "8888:8888"
     volumes:
@@ -16,7 +16,7 @@ services:
     build:
       context: .
       target: spark
-    container_name: spark-master
+    image: my-spark:3.5.1
     environment:
       - SPARK_MODE=master
     ports:
@@ -30,12 +30,12 @@ services:
     build:
       context: .
       target: spark
-    container_name: spark-worker
-    ports:
-      - "8081:8081"
+    image: my-spark:3.5.1
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
+    ports:
+      - "8081:8081"
     command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
     depends_on:
       - spark-master

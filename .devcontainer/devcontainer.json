@@ -4,8 +4,8 @@
         "../docker-compose.yaml",
         "./docker-compose.override.yaml"
     ],
-    "service": "jupyter",
-    "workspaceFolder": "/home/jovyan/work",
+    "service": "jupyter-notebook",
+    "workspaceFolder": "/home/spark/notebooks",
     "customizations": {
         "vscode": {
             "settings": {
@@ -17,5 +17,5 @@
             ]
         }
     },
-    "remoteUser": "root"
+    "remoteUser": "spark"
 }

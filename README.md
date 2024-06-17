@@ -22,8 +22,9 @@ Este repositório contém os arquivos necessários para criar containers Docker 
 ### Subindo os containers
 
 1. Clone o repositório:
+
     ```bash
-    git clone [airtoncarneiro/dev-spark-jupyter](https://github.com/airtoncarneiro/dev-spark-jupyter)
+    git clone https://github.com/airtoncarneiro/dev-spark-jupyter
     cd dev-spark-jupyter
     ```
 
@@ -68,6 +69,7 @@ Este repositório contém os arquivos necessários para criar containers Docker 
 ## Usando o VSCode (devcontainer)
 
 Ao abrir o projeto no VSCode surgirá uma mensagem solicitando para abrir no _devcontainer_. Basta aceitar que todo o ambiente será montado automaticamente e você poderá usar o Jupyter integrado ao VSCode.
+Editar o arquivo _docker_compose_override.yaml_ caso queira alterar as configurações padrões que foram estabelecidas no _docker-compose.yaml_.
 
 ![vscode devcontainer popup image](./img/devcontainer.png)
 

@@ -29,8 +29,8 @@ services:
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://spark-master:7077
-    ports:
-      - "8081:8081"
+    # ports:
+    #   - "8081:8081"
     user: ${USER_NAME}
     command: /bin/bash -c "/opt/spark-3.5.1-bin-hadoop3/sbin/start-worker.sh spark://spark-master:7077 && tail -f /opt/spark-3.5.1-bin-hadoop3/logs/*"
     depends_on:
